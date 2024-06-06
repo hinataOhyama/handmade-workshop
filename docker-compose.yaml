@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  frontend:
+    container_name: todo-front
+    build:
+      dockerfile: todo/frontend/Dockerfile
+      context: .
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /src
+    environment:
+      - NODE_ENV=development
+    command: sh -c 'cd todo && yarn start'
+    ports:
+      - '13000:3000'
+    tty: true
+  backend:
+    container_name: todo-back
+    build:
+      dockerfile: todo/backend/Dockerfile
+      context: .
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /src
+    ports:
+      - '18000:8000'
+  mysql:
+    container_name: todo-db
+    build:
+      dockerfile: todo/db/Dockerfile
+      context: .
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: todo
+    ports:
+      - "13306:3306"
+    volumes:
+      - type: volume
+        source: todo-db-volume
+        target: /var/lib/mysql
+      - type: bind
+        source: ./db/init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  todo-db-volume:

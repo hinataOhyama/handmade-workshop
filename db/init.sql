@@ -1,0 +1,16 @@
+CREATE DATABASE IF NOT EXISTS todo;
+USE todo;
+
+DROP TABLE IF EXISTS task;
+
+CREATE TABLE task
+(
+  id    BIGINT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(40) NOT NULL,
+  body  VARCHAR(255) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+);
+
+INSERT INTO task (title, body) VALUES ("task1", "task1 body here");
+INSERT INTO task (title, body) VALUES ("task2", "task2 body here");
