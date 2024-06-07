@@ -1,51 +1,38 @@
 version: '3.9'
 services:
-  frontend:
-    container_name: todo-front
+  handmade-workshop:
+    container_name: ec-front
     build:
-      dockerfile: todo/frontend/Dockerfile
+      dockerfile: ec/handmade-workshop/Dockerfile
       context: .
     volumes:
       - type: bind
-        source: ./frontend
+        source: ./handmade-workshop
         target: /src
     environment:
       - NODE_ENV=development
-    command: sh -c 'cd todo && yarn start'
     ports:
       - '13000:3000'
     tty: true
-  backend:
-    container_name: todo-back
-    build:
-      dockerfile: todo/backend/Dockerfile
-      context: .
-    volumes:
-      - type: bind
-        source: ./backend
-        target: /src
-    ports:
-      - '18000:8000'
-    tty: true
   mysql:
-    container_name: todo-db
+    container_name: handmade-workshop-db
     build:
-      dockerfile: todo/db/Dockerfile
+      dockerfile: handmade-workshop/db/Dockerfile
       context: .
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: todo
+      MYSQL_DATABASE: ec
     ports:
       - "13306:3306"
     volumes:
       - type: volume
-        source: todo-db-volume
+        source: ec-db-volume
         target: /var/lib/mysql
       - type: bind
         source: ./db/init.sql
         target: /docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  todo-db-volume:
+  ec-db-volume:
