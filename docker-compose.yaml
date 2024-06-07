@@ -26,6 +26,7 @@ services:
         target: /src
     ports:
       - '18000:8000'
+    tty: true
   mysql:
     container_name: todo-db
     build:
