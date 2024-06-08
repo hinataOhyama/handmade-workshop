@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  handmade-workshop:
+  app:
     container_name: ec-front
     build:
       dockerfile: ec/handmade-workshop/Dockerfile
@@ -14,25 +14,24 @@ services:
     ports:
       - '13000:3000'
     tty: true
-  mysql:
+  db:
+    image: mysql:5.7
     container_name: handmade-workshop-db
-    build:
-      dockerfile: handmade-workshop/db/Dockerfile
-      context: .
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_USER: user
       MYSQL_PASSWORD: password
-      MYSQL_DATABASE: ec
+      MYSQL_DATABASE: handmade_workshop
     ports:
       - "13306:3306"
     volumes:
       - type: volume
-        source: ec-db-volume
+        source: handmade-workshop-db-volume
         target: /var/lib/mysql
       - type: bind
-        source: ./db/init.sql
+        source: ./src/db/init.sql
         target: /docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  ec-db-volume:
+  handmade-workshop-db-volume:
